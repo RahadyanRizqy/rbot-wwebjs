@@ -89,11 +89,11 @@ client.on('message', async (msg) => {
                         let stickerName = "";
                         if (argument !== null) {
                             if (argument.length === 2) {
-                                stickerAuthor = argument[0];
-                                stickerName = argument[1];
+                                stickerAuthor = argument[0].includes("_") ? argument[0].split("_").join(" ") : argument[0];
+                                stickerName = argument[1].includes("_") ? argument[1].split("_").join(" ") : argument[1];
                             } else if (argument.length){
                                 stickerAuthor = `${config.author}`;
-                                stickerName = argument;
+                                stickerName = argument.includes("_") ? argument.split("_").join(" ") : argument;
                             }                            
                         }
                         else {
