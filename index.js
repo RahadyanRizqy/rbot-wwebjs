@@ -16,7 +16,7 @@ const client = new Client({
         args: [ '--no-sandbox', '--disable-setuid-sandbox' ]
     },
     ffmpeg: './ffmpeg.exe',
-    authStrategy: new LocalAuth({ clientId: 'test-env'}),
+    authStrategy: new LocalAuth({ clientId: `${config.clientId}`}),
 });
 
 function logErrorToFile(errorMsg) {
@@ -89,8 +89,8 @@ client.on('message', async (msg) => {
                         let stickerName = "";
                         if (argument !== null) {
                             if (argument.length === 2) {
-                                stickerAuthor = argument[0].includes("_") ? argument[0].split("_").join(" ") : argument[0];
-                                stickerName = argument[1].includes("_") ? argument[1].split("_").join(" ") : argument[1];
+                                stickerAuthor = argument[1].includes("_") ? argument[1].split("_").join(" ") : argument[1];
+                                stickerName = argument[0].includes("_") ? argument[0].split("_").join(" ") : argument[0];
                             } else if (argument.length){
                                 stickerAuthor = `${config.author}`;
                                 stickerName = argument.includes("_") ? argument.split("_").join(" ") : argument;
