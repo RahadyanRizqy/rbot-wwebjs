@@ -21,15 +21,12 @@ const client = new Client({
 
 function logErrorToFile(errorMsg) {
     const logDirectory = 'log';
-    const timestamp = moment().format('DD-MM-YYYY-HH-mm-ss'); // Format timestamp in local time
+    const timestamp = moment().format('DD-MM-YYYY-HH-mm-ss');
     const logFilePath = path.join(logDirectory, `${timestamp}.log`);
 
-    // Create the log directory if it doesn't exist
     if (!fs.existsSync(logDirectory)) {
         fs.mkdirSync(logDirectory);
     }
-
-    // Write the error message to the log file
     fs.appendFile(logFilePath, errorMsg + '\n', (err) => {
         if (err) {
             console.error('Error writing to log file:', err);
@@ -39,11 +36,9 @@ function logErrorToFile(errorMsg) {
 
 function fileExists(filePath) {
     try {
-        // Check if the file exists
         fs.statSync(filePath);
         return true;
     } catch (error) {
-        // File does not exist or other error occurred
         return false;
     }
 }
@@ -89,7 +84,7 @@ client.on('message', async (msg) => {
                         let stickerName = "";
                         if (argument !== null) {
                             if (argument.length === 2) {
-                                stickerAuthor = argument[1].includes("_") ? argument[1].split("_").join(" ") : argument[1];
+                                stickerAuthor = `${(argument[1].includes("_") ? argument[1].split("_").join(" ") : argument[1])}•${config.author}`;
                                 stickerName = argument[0].includes("_") ? argument[0].split("_").join(" ") : argument[0];
                             } else if (argument.length){
                                 stickerAuthor = `${config.author}`;
@@ -150,6 +145,9 @@ client.on('message', async (msg) => {
                     client.sendMessage(msg.from, 'Command tidak tersedia. Silahkan *.help*');
                 }
             }
+            else if (msg.body === 'p') {
+                client.sendMessage(msg.from, 'Apa cuk, pa pe pa pe, yang sopan! 😑 *.help*')
+            }
             else {
                 client.sendMessage(msg.from, 'Tidak jelas, mangsud? 🤨 *.help*');
             }
@@ -166,10 +164,6 @@ client.on('message', async (msg) => {
         client.sendMessage(msg.from, 'Ada error! 😵‍💫');
         client.setStatus('Terjadi error!');
     }
-    // finally {
-    //     // console.log(msg);
-    //     msg.delete();
-    // }
 });
 
 client.initialize();
