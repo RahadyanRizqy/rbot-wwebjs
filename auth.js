@@ -6,7 +6,7 @@ const client = new Client({
         args: [ '--no-sandbox', '--disable-setuid-sandbox' ]
     },
     ffmpeg: './ffmpeg.exe',
-    authStrategy: new LocalAuth({ clientId: 'test-env'}),
+    authStrategy: new LocalAuth({ clientId: `${config.clientId}`}),
 });
 
 client.on('qr', (qr) => {
