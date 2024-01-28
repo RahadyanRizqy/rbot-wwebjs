@@ -57,28 +57,33 @@ client.on('message', async (msg) => {
                 }
                 else if (command === 'about') {
                     const admin_profile = MessageMedia.fromFilePath('./statics/admin.jpg');
+                    const userName = (await msg.getContact()).pushname;
                     client.sendMessage(msg.from, admin_profile, {
-                        caption: aboutCaption
+                        caption: aboutCaption(userName)
                     });
                 }
                 else if (command === 'help') {
                     client.sendMessage(msg.from, helpMsg);
                 }
-                else if (command === 'confess') {
-                    const parts = msg.body.match(/^(\S+)\s+(\d+)\.\[(.*?)\]$/);
-                    // const confessMsg = argument ? argument[1] : null;
-                    // if (!phoneNumber || !confessMsg) {
-                    //     client.sendMessage(msg.from, 'Salah satu/dua argumen kosong!');
-                    // }
-                    // const regex = /\[(.*?)\]/;
-                    // const match = regex.exec(confessMsg);
-                    // if (match) {
-                    //     client.sendMessage(`${phoneNumber}@c.us`, match[1]);
-                    // } else {
-                    //     throw new Error();
-                    // }
-                    // client.sendMessage(msg.from, `Command: ${parts[1]} Tujuan: ${parts[2]} Pesan: ${parts[3]}`);
-                    client.sendMessage(msg.from, "To be continued...");
+                else if (command === 'greet') {
+                    // client.sendMessage(msg.from, `@${contact.id.user}`, { mentions: [contact]}); TAG A USER
+                    client.sendMessage(msg.from, `Halo 👋 ${(await msg.getContact()).pushname}`);
+                }
+                else if (command === 'epoch') {
+                    const currentTime = Date.now();
+                    if (argument) {
+                        const [day, month, year] = argument[0] ? argument[0].split('-').map(Number) : null;
+                        const [hours, minutes, seconds] = argument[1] ? argument[1].split(':').map(Number) : '00:00:00'.split(':').map(Number);
+                        const dateObject = new Date(year, month - 1, day, hours, minutes, seconds);
+                        if (dateObject.getTime().toString().includes('-')) {
+                            client.sendMessage(msg.from, "Tanggal tidak valid (format: DD-MM-YYYY.HH:MM:SS)");
+                        } else {
+                            client.sendMessage(msg.from, `${dateObject.getTime()}`);
+                        }
+                    }
+                    else {
+                        client.sendMessage(msg.from, `${currentTime}`);
+                    }
                 }
             }
             else {
@@ -100,5 +105,5 @@ client.on('message', async (msg) => {
         msg.delete();
     }
 });
- 
+
 client.initialize();
