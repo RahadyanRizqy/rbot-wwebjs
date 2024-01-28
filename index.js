@@ -82,7 +82,7 @@ client.on('message', async (msg) => {
                                             msgBody[1] // ELSE GET THE ARGUMENT
                                                 ) : null; // IF THERE IS NO ARG THEN NULL
                 if (command === 'sticker') {
-                    if (!msg.hasMedia) {
+                    if (msg.hasMedia) {
                         const media = await msg.downloadMedia();
                         client.sendMessage(msg.from, 'Loading...');
                         let stickerAuthor = "";
