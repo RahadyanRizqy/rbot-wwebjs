@@ -147,11 +147,11 @@ client.on('message', async (msg) => {
                     }
                 }
                 else {
-                    client.sendMessage(msg.from, 'Tidak jelas, mangsud? 🤨 .help');
+                    client.sendMessage(msg.from, 'Command tidak tersedia. Silahkan *.help*');
                 }
             }
             else {
-                client.sendMessage(msg.from, 'Tidak jelas, mangsud? 🤨 .help');
+                client.sendMessage(msg.from, 'Tidak jelas, mangsud? 🤨 *.help*');
             }
 
         } else if (status === 'maintenance') {
@@ -164,6 +164,7 @@ client.on('message', async (msg) => {
         console.log(error);
         logErrorToFile(error.toString());
         client.sendMessage(msg.from, 'Ada error! 😵‍💫');
+        client.setStatus('Terjadi error!');
     }
     // finally {
     //     // console.log(msg);
