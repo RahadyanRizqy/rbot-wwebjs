@@ -1,7 +1,15 @@
 const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const fs = require('fs');
+const path = require('path');
+const moment = require('moment-timezone');
+
 const { aboutCaption, helpMsg } = require('./statics/caption');
+const config = require('./config.json');
+const status = `${config.status}`;
+
+moment.tz.setDefault(config.timezone);
+
 const client = new Client({
     puppeteer: {
         headless: true,
@@ -10,8 +18,36 @@ const client = new Client({
     ffmpeg: './ffmpeg.exe',
     authStrategy: new LocalAuth({ clientId: 'wabot-wwebjs'}),
 });
-const config = require('./config.json');
-const status = `${config.status}`;
+
+function logErrorToFile(errorMsg) {
+    const logDirectory = 'log';
+    const timestamp = moment().format('DD-MM-YYYY-HH-mm-ss'); // Format timestamp in local time
+    const logFilePath = path.join(logDirectory, `${timestamp}.log`);
+
+    // Create the log directory if it doesn't exist
+    if (!fs.existsSync(logDirectory)) {
+        fs.mkdirSync(logDirectory);
+    }
+
+    // Write the error message to the log file
+    fs.appendFile(logFilePath, errorMsg + '\n', (err) => {
+        if (err) {
+            console.error('Error writing to log file:', err);
+        }
+    });
+}
+
+function fileExists(filePath) {
+    try {
+        // Check if the file exists
+        fs.statSync(filePath);
+        return true;
+    } catch (error) {
+        // File does not exist or other error occurred
+        return false;
+    }
+}
+
 client.on('qr', (qr) => {
     qrcode.generate(qr, { small: true });
 });
@@ -40,30 +76,55 @@ client.on('message', async (msg) => {
             if (msg.body.startsWith(prefix)) {
                 const msgBody = msg.body.split(" ");
                 const command = msgBody[0].split(".")[1];
-                const argument = msgBody[1] ? msgBody[1].split(".") : null;
+                const argument = msgBody[1] ? (
+                                    msgBody[1].includes(".") ? // IF THERE IS DOT 
+                                        msgBody[1].split(".") : // THEN SPLIT
+                                            msgBody[1] // ELSE GET THE ARGUMENT
+                                                ) : null; // IF THERE IS NO ARG THEN NULL
                 if (command === 'sticker') {
-                    if (msg.hasMedia) {
+                    if (!msg.hasMedia) {
                         const media = await msg.downloadMedia();
                         client.sendMessage(msg.from, 'Loading...');
+                        let stickerAuthor = "";
+                        let stickerName = "";
+                        if (argument !== null) {
+                            if (argument.length === 2) {
+                                stickerAuthor = argument[0];
+                                stickerName = argument[1];
+                            } else if (argument.length){
+                                stickerAuthor = `${config.author}`;
+                                stickerName = argument;
+                            }                            
+                        }
+                        else {
+                            stickerAuthor = `${config.author}`;
+                            stickerName = `${config.name}`;
+                        }
                         client.sendMessage(msg.from, media, {
                             sendMediaAsSticker: true,
-                            stickerName: argument ? argument[0].split("_").join(" ") : `${config.name}`,
-                            stickerAuthor: argument ? argument[1].split("_").join(" ") : `${config.author}`
+                            stickerName: stickerName,
+                            stickerAuthor: stickerAuthor
                         });
+                        msg.delete();
                     }
                     else {
                         client.sendMessage(msg.from, 'Media tidak dicantumkan!');
                     }
                 }
                 else if (command === 'about') {
-                    const admin_profile = MessageMedia.fromFilePath('./statics/admin.jpg');
+                    let adminProfile = null;
+                    if (fileExists('./statics/admin.jpg')) {
+                        adminProfile = MessageMedia.fromFilePath('./statics/admin.jpg');
+                    } else {
+                        adminProfile = await MessageMedia.fromUrl('https://fastly.picsum.photos/id/866/300/300.jpg?hmac=9qmLpcaT9TgKd6PD37aZJZ_7QvgrVFMcvI3JQKWVUIQ');
+                    }
                     const userName = (await msg.getContact()).pushname;
-                    client.sendMessage(msg.from, admin_profile, {
-                        caption: aboutCaption(userName)
+                    client.sendMessage(msg.from, adminProfile, {
+                        caption: `${aboutCaption(userName) ?? 'your about'}`
                     });
                 }
                 else if (command === 'help') {
-                    client.sendMessage(msg.from, helpMsg);
+                    client.sendMessage(msg.from, `${helpMsg(prefix) ?? 'your help message'}`);
                 }
                 else if (command === 'greet') {
                     // client.sendMessage(msg.from, `@${contact.id.user}`, { mentions: [contact]}); TAG A USER
@@ -85,9 +146,12 @@ client.on('message', async (msg) => {
                         client.sendMessage(msg.from, `${currentTime}`);
                     }
                 }
+                else {
+                    client.sendMessage(msg.from, 'Tidak jelas, mangsud? 🤨 .help');
+                }
             }
             else {
-                client.sendMessage(msg.from, 'Tidak jelas, mangsud? 🤨');
+                client.sendMessage(msg.from, 'Tidak jelas, mangsud? 🤨 .help');
             }
 
         } else if (status === 'maintenance') {
@@ -98,12 +162,13 @@ client.on('message', async (msg) => {
     }
     catch (error) {
         console.log(error);
+        logErrorToFile(error.toString());
         client.sendMessage(msg.from, 'Ada error! 😵‍💫');
     }
-    finally {
-        console.log(msg);
-        msg.delete();
-    }
+    // finally {
+    //     // console.log(msg);
+    //     msg.delete();
+    // }
 });
 
 client.initialize();

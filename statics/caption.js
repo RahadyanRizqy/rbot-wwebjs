@@ -2,7 +2,7 @@ const aboutCaption = (userName) => `★═══[🤖BOT]═══★
 Hai 👋 ${userName}, versi paling sederhana ini masih difokuskan untuk keperluan sticker dan gif. Bila ada permasalahan, error, respon tidak sesuai silahkan bisa lapor ke admin 👨‍💻. (Admin bilek: 😎)
 
 ★═══[❓HELP]═══★
-r.help
+.help
 
 ★═══[🦉ADMIN]═══★
 WhatsApp: https://wa.me/6288804897436
@@ -13,6 +13,7 @@ GitHub: https://github.com/RahadyanRizqy
 ◆ Untuk konversi video menjadi sticker/gif mungkin agak lama dikit
 ◆ Cek maintenance/tidak di status profil bot wa
 ◆ Maintenance dilakukan tiap akhir pekan Sabtu 09.00 (WIB) +7
+◆ Atau kalau error wkwkwk
 
 ★═══[🙏MUCH THX]═══★
 ☞ https://wwebjs.dev/
@@ -24,21 +25,21 @@ SELF-HOSTED CHATBOT
 container-id: 108 
 hostname: ubct-rbot-wwebjs`;
 
-const helpMsg = `★═══[☝️CMDS]═══★
-r.help
+const helpMsg = (prefix) => `★═══[☝️CMDS]═══★
+${prefix}help
 -> menampilkan command dan help ini
 
-r.sticker author?.name?
+${prefix}sticker author?.name?
 -> ubah media jadi sticker 
--> cth cmd: r.sticker / r.sticker my.sticker / r.sticker lucu_banget.lho_rek
+-> cth cmd: ${prefix}sticker / ${prefix}sticker my.sticker / ${prefix}sticker lucu_banget.lho_rek
 -> untuk spasi masih menggunakan underscore _
--> r.sticker saja maka default ©r-bot • 6288989126165
+-> ${prefix}sticker saja maka default ©r-bot • 6288989126165
 
-r.epoch now? (format: DD-MM-YYYY.HH:MM:SS)
+${prefix}epoch now? (format: DD-MM-YYYY.HH:MM:SS)
 -> ubah hari ini/datetime menjadi UNIX timestamp
--> cth cmd: r.epoch / r.epoch 11-11-2002.08:45:00
+-> cth cmd: ${prefix}epoch / ${prefix}epoch 11-11-2002.08:45:00
 
-r.about
+${prefix}about
 -> tentang pembuat`;
 
 module.exports = { aboutCaption, helpMsg }; 
