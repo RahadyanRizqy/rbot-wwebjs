@@ -3,7 +3,7 @@ const qrcode = require('qrcode-terminal');
 const fs = require('fs');
 const client = new Client({
     puppeteer: {
-        headless: false,
+        headless: true,
         args: [ '--no-sandbox', '--disable-setuid-sandbox' ]
     },
     ffmpeg: './ffmpeg.exe',
@@ -43,18 +43,18 @@ client.on('message', async (msg) => {
             else if (command === 'about') {
                 const admin_profile = MessageMedia.fromFilePath('./statics/admin.jpg');
                 const aboutCaption = `★═══[🤖BOT]═══★
-    Hai 👋, versi paling sederhana ini masih difokuskan untuk keperluan sticker dan gif. Bila ada permasalahan, error, respon tidak sesuai silahkan bisa lapor ke admin 👨‍💻. (Admin bilek: 😎)
-    
-    ★═══[❓HELP]═══★
-    r.help
-    
-    ★═══[🦉ADMIN]═══★
-    WhatsApp: https://wa.me/6288804897436
-    LinkedIn: https://www.linkedin.com/in/rahadyan-rizqy
-    GitHub: https://github.com/RahadyanRizqy
-    
-    ★═══[🗒️NOTE]═══★
-    ◆ Untuk konversi video menjadi sticker/gif mungkin agak lama dikit`
+Hai 👋, versi paling sederhana ini masih difokuskan untuk keperluan sticker dan gif. Bila ada permasalahan, error, respon tidak sesuai silahkan bisa lapor ke admin 👨‍💻. (Admin bilek: 😎)
+
+★═══[❓HELP]═══★
+r.help
+
+★═══[🦉ADMIN]═══★
+WhatsApp: https://wa.me/6288804897436
+LinkedIn: https://www.linkedin.com/in/rahadyan-rizqy
+GitHub: https://github.com/RahadyanRizqy
+
+★═══[🗒️NOTE]═══★
+◆ Untuk konversi video menjadi sticker/gif mungkin agak lama dikit`;
                 client.sendMessage(msg.from, admin_profile, {
                     caption: aboutCaption
                 });
@@ -68,7 +68,7 @@ r.sticker author?.name?
 -> ubah media jadi sticker cth cmd: r.sticker / r.sticker my.sticker / r.sticker lucu_banget.lho_rek
 
 r.about
--> tentang pembuat`
+-> tentang pembuat`;
                 client.sendMessage(msg.from, helpBody);
             }
             else if (command === 'confess') {
