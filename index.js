@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const moment = require('moment-timezone');
 
-const { aboutCaption, helpMsg } = require('./statics/caption');
+const { aboutCaption, helpMsg, featureMsg } = require('./statics/caption');
 const config = require('./config.json');
 const status = `${config.status}`;
 
@@ -140,6 +140,9 @@ client.on('message', async (msg) => {
                     else {
                         client.sendMessage(msg.from, `${currentTime}`);
                     }
+                }
+                else if (command === 'feature') {
+                    client.sendMessage(msg.from, `${featureMsg}`);
                 }
                 else {
                     client.sendMessage(msg.from, 'Command tidak tersedia. Silahkan *.help*');
