@@ -145,8 +145,11 @@ client.on('message', async (msg) => {
                     client.sendMessage(msg.from, 'Command tidak tersedia. Silahkan *.help*');
                 }
             }
-            else if (msg.body === 'p') {
+            else if (msg.body.toLocaleLowerCase() === 'p') {
                 client.sendMessage(msg.from, 'Apa cuk, pa pe pa pe, yang sopan! 😑 *.help*')
+            }
+            else if (msg.body.toLocaleLowerCase().includes('assalamualaikum')) {
+                client.sendMessage(msg.from, 'Waalaikumussalam 😇🙏')
             }
             else {
                 client.sendMessage(msg.from, 'Tidak jelas, mangsud? 🤨 *.help*');
