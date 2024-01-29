@@ -6,7 +6,13 @@ const moment = require('moment-timezone');
 
 const { aboutCaption, helpMsg, featureMsg } = require('./statics/caption');
 const config = require('./config.json');
-let status = `${config.status}`;
+// let status = await (await client.getContactById(client.info.wid._serialized)).getAbout();
+let onlineMsg = 'Online 24/7'; // .on
+let maintenanceMsg = 'Mohon maaf sedang maintenance 🙏'; // .halt
+let offlineMsg = 'Offline 😴'; // .off
+let isOnline = true;
+let isInMaintenance = false;
+let isOffline = false;
 
 moment.tz.setDefault(config.timezone);
 
@@ -48,17 +54,17 @@ client.on('qr', (qr) => {
 });
 
 client.on('ready', () => {
-    if (status === 'online') {
-        client.setStatus('Online 24/7');
-        console.log('Client is ready!');
+    if (isOnline) {
+        client.setStatus(onlineMsg);
+        console.log('Client is online!');
 
-    } else if (status === 'maintenance') {
-        client.setStatus('Mohon maaf sedang maintenance 🙏');
+    } else if (isInMaintenance) {
+        client.setStatus(maintenanceMsg);
         console.log('Client is in maintenance');
 
     } else {
-        client.setStatus('Offline 😴');
-        console.log('Unavailable');
+        client.setStatus(offlineMsg);
+        console.log('Client is offline');
     }
 });
 
@@ -67,7 +73,7 @@ client.on('message', async (msg) => {
         const isGroupMsg = msg.from.endsWith('@g.us') ? true : false;
         
         const prefix = `${config.prefix}`;
-        if (status === 'online') {
+        if (isOnline) {
             if (msg.body.startsWith(prefix)) {
                 const msgBody = msg.body.split(" ");
                 const command = msgBody[0].split(".")[1];
@@ -145,15 +151,23 @@ client.on('message', async (msg) => {
                     await client.sendMessage(msg.from, `${featureMsg}`);
                 }
                 else if (command === 'botstatus') {
-                    const botAbout = await client.getContacts();
+                    const botAbout = await (await client.getContactById(client.info.wid._serialized)).getAbout();
                     // await client.sendMessage(msg.from, `${await client.getState()}`);
+                    // console.log(client.wid);
+                    // await client.sendMessage(msg.from, `${ClientInfo.wid}`);
                     console.log(botAbout);
+                }
+                else if (command === 'halt' && msg.from === '6288804897436@c.us') { // ADMIN ONLY COMMAND
+                    await client.sendMessage(msg.from, '[BOT-HALTED]');
+                    isOnline = false;
+                    isInMaintenance = true;
+                    await client.setStatus(maintenanceMsg);
                 }
                 else {
                     await client.sendMessage(msg.from, 'Command tidak tersedia. Silahkan *.help*');
                 }
             }
-            else if (msg.body.toLocaleLowerCase() === 'p') {
+            else if (msg.body.toLocaleLowerCase() === 'p' || (msg.body.toLocaleLowerCase()[0] === 'p' && /(.)\1+/.test(msg.body.toLocaleLowerCase()))) {
                 await client.sendMessage(msg.from, 'Apa cuk, pa pe pa pe, yang sopan! 😑 *.help*')
             }
             else if (msg.body.toLocaleLowerCase().includes('assalamualaikum')) {
@@ -163,8 +177,21 @@ client.on('message', async (msg) => {
                 await client.sendMessage(msg.from, 'Tidak jelas, mangsud? 🤨 *.help*');
             }
 
-        } else if (status === 'maintenance') {
-            await client.sendMessage(msg.from, 'Sedang maintenance mohon bersabar 😗');
+        } else if (isInMaintenance) {
+            if (msg.body === '.on' && msg.from === '6288804897436@c.us') { // ADMIN ONLY COMMAND
+                await client.sendMessage(msg.from, '[BOT-ONLINE]');
+                isOnline = true;
+                isInMaintenance = false;
+                await client.setStatus(onlineMsg);
+            } else if (msg.body === '.off' && msg.from === '6288804897436@c.us') {
+                await client.sendMessage(msg.from, '[BOT-OFFLINE]');
+                isOnline = false;
+                isInMaintenance = false;
+                isOffline = true;
+                await client.setStatus(offlineMsg);
+            } else {
+                await client.sendMessage(msg.from, 'Sedang maintenance mohon bersabar 😗');
+            }
         } else {
             await client.sendMessage(msg.from, 'Segera offline...');
         }
@@ -173,7 +200,7 @@ client.on('message', async (msg) => {
         console.log(error);
         logErrorToFile(error.toString());
         await client.sendMessage(msg.from, 'Ada error! 😵‍💫');
-        status = 'Terjadi error!';
+        // status = 'Terjadi error!';
         await client.setStatus('Terjadi error!');
     }
 });
