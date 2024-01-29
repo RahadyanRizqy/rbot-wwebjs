@@ -1,4 +1,4 @@
-const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
+const { Client, LocalAuth, MessageMedia, Contact } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const fs = require('fs');
 const path = require('path');
@@ -6,7 +6,7 @@ const moment = require('moment-timezone');
 
 const { aboutCaption, helpMsg, featureMsg } = require('./statics/caption');
 const config = require('./config.json');
-const status = `${config.status}`;
+let status = `${config.status}`;
 
 moment.tz.setDefault(config.timezone);
 
@@ -79,7 +79,7 @@ client.on('message', async (msg) => {
                 if (command === 'sticker') {
                     if (msg.hasMedia) {
                         const media = await msg.downloadMedia();
-                        client.sendMessage(msg.from, 'Loading...');
+                        await client.sendMessage(msg.from, 'Loading...');
                         let stickerAuthor = "";
                         let stickerName = "";
                         if (argument !== null) {
@@ -95,15 +95,15 @@ client.on('message', async (msg) => {
                             stickerAuthor = `${config.author}`;
                             stickerName = `${config.name}`;
                         }
-                        client.sendMessage(msg.from, media, {
+                        await client.sendMessage(msg.from, media, {
                             sendMediaAsSticker: true,
                             stickerName: stickerName,
                             stickerAuthor: stickerAuthor
                         });
-                        msg.delete();
+                        await msg.delete();
                     }
                     else {
-                        client.sendMessage(msg.from, 'Media tidak dicantumkan!');
+                        await client.sendMessage(msg.from, 'Media tidak dicantumkan!');
                     }
                 }
                 else if (command === 'about') {
@@ -114,16 +114,16 @@ client.on('message', async (msg) => {
                         adminProfile = await MessageMedia.fromUrl('https://fastly.picsum.photos/id/866/300/300.jpg?hmac=9qmLpcaT9TgKd6PD37aZJZ_7QvgrVFMcvI3JQKWVUIQ');
                     }
                     const userName = (await msg.getContact()).pushname;
-                    client.sendMessage(msg.from, adminProfile, {
+                    await client.sendMessage(msg.from, adminProfile, {
                         caption: `${aboutCaption(userName) ?? 'your about'}`
                     });
                 }
                 else if (command === 'help') {
-                    client.sendMessage(msg.from, `${helpMsg(prefix) ?? 'your help message'}`);
+                    await client.sendMessage(msg.from, `${helpMsg(prefix) ?? 'your help message'}`);
                 }
                 else if (command === 'greet') {
                     // client.sendMessage(msg.from, `@${contact.id.user}`, { mentions: [contact]}); TAG A USER
-                    client.sendMessage(msg.from, `Halo 👋 ${(await msg.getContact()).pushname}`);
+                    await client.sendMessage(msg.from, `Halo 👋 ${(await msg.getContact()).pushname}`);
                 }
                 else if (command === 'epoch') {
                     const currentTime = Date.now();
@@ -132,43 +132,49 @@ client.on('message', async (msg) => {
                         const [hours, minutes, seconds] = argument[1] ? argument[1].split(':').map(Number) : '00:00:00'.split(':').map(Number);
                         const dateObject = new Date(year, month - 1, day, hours, minutes, seconds);
                         if (dateObject.getTime().toString().includes('-')) {
-                            client.sendMessage(msg.from, "Tanggal tidak valid (format: DD-MM-YYYY.HH:MM:SS)");
+                            await client.sendMessage(msg.from, "Tanggal tidak valid (format: DD-MM-YYYY.HH:MM:SS)");
                         } else {
-                            client.sendMessage(msg.from, `${dateObject.getTime()}`);
+                            await client.sendMessage(msg.from, `${dateObject.getTime()}`);
                         }
                     }
                     else {
-                        client.sendMessage(msg.from, `${currentTime}`);
+                        await client.sendMessage(msg.from, `${currentTime}`);
                     }
                 }
                 else if (command === 'feature') {
-                    client.sendMessage(msg.from, `${featureMsg}`);
+                    await client.sendMessage(msg.from, `${featureMsg}`);
+                }
+                else if (command === 'botstatus') {
+                    const botAbout = await client.getContacts();
+                    // await client.sendMessage(msg.from, `${await client.getState()}`);
+                    console.log(botAbout);
                 }
                 else {
-                    client.sendMessage(msg.from, 'Command tidak tersedia. Silahkan *.help*');
+                    await client.sendMessage(msg.from, 'Command tidak tersedia. Silahkan *.help*');
                 }
             }
             else if (msg.body.toLocaleLowerCase() === 'p') {
-                client.sendMessage(msg.from, 'Apa cuk, pa pe pa pe, yang sopan! 😑 *.help*')
+                await client.sendMessage(msg.from, 'Apa cuk, pa pe pa pe, yang sopan! 😑 *.help*')
             }
             else if (msg.body.toLocaleLowerCase().includes('assalamualaikum')) {
-                client.sendMessage(msg.from, 'Waalaikumussalam 😇🙏')
+                await client.sendMessage(msg.from, 'Waalaikumussalam 😇🙏')
             }
             else {
-                client.sendMessage(msg.from, 'Tidak jelas, mangsud? 🤨 *.help*');
+                await client.sendMessage(msg.from, 'Tidak jelas, mangsud? 🤨 *.help*');
             }
 
         } else if (status === 'maintenance') {
-            client.sendMessage(msg.from, 'Sedang maintenance mohon bersabar 😗');
+            await client.sendMessage(msg.from, 'Sedang maintenance mohon bersabar 😗');
         } else {
-            client.sendMessage(msg.from, 'Segera offline...');
+            await client.sendMessage(msg.from, 'Segera offline...');
         }
     }
     catch (error) {
         console.log(error);
         logErrorToFile(error.toString());
-        client.sendMessage(msg.from, 'Ada error! 😵‍💫');
-        client.setStatus('Terjadi error!');
+        await client.sendMessage(msg.from, 'Ada error! 😵‍💫');
+        status = 'Terjadi error!';
+        await client.setStatus('Terjadi error!');
     }
 });
 
