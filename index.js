@@ -1,17 +1,12 @@
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 
-
-const moment = require('moment-timezone');
-
 const { bmhdb } = require('./utils/BMHDatabase');
 const { BotMessageHandler } = require('./utils/BotMessageHandler');
 const { EnumMessageHandler } = require('./utils/EnumMessageHandler');
 const { logErrorToFile } = require('./utils/Functions');
 
 const config  = require('./config.json');
-
-moment.tz.setDefault(config.timezone);
 
 const client = new Client({
     puppeteer: {
@@ -38,7 +33,7 @@ client.on('message', async (message) => {
         _bmh.listenPrivate();
         console.log(_bmh._bmhData);
     } catch (error) {
-        logErrorToFile(error.toString());
+        logErrorToFile(error.toString(), config);
     }
 });
 

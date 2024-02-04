@@ -4,8 +4,12 @@ const path = require('path');
 const { format } = require('date-fns');
 const { zonedTimeToUtc } = require('date-fns-tz');
 
-function logErrorToFile(errorMsg, formatDateTimeNow, config) {
-    const logDirectory = 'log';
+function formatDateTimeNow(timeZoneConfig, dateTimeFormat) {
+    return format(zonedTimeToUtc(new Date(), timeZoneConfig), dateTimeFormat, { timeZone: timeZoneConfig });
+}
+
+function logErrorToFile(errorMsg, config) {
+    const logDirectory = 'errorlog';
     const timestamp = formatDateTimeNow(config.timezone, 'dd-MM-yyyy-HH-mm-ss');
     const logFilePath = path.join(logDirectory, `${timestamp}.log`);
     if (!fs.existsSync(logDirectory)) {
@@ -41,11 +45,6 @@ function checkFileFromUrl(url) {
             reject(err);
         });
     });
-}
-
-
-function formatDateTimeNow(timeZoneConfig, dateTimeFormat) {
-    return format(zonedTimeToUtc(new Date(), timeZoneConfig), dateTimeFormat, { timeZone: timeZoneConfig });
 }
 
 module.exports = { logErrorToFile, fileExists, checkFileFromUrl, formatDateTimeNow };
