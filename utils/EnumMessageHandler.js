@@ -1,6 +1,5 @@
-const { fileExists, checkFileFromUrl } = require('./Functions');
+const { fileExists, checkFileFromUrl, formatDateTimeNow } = require('./Functions');
 const { MessageMedia } = require('whatsapp-web.js');
-const config  = require('./../config.json');
 const date = require('date-and-time');
 
 // MULTILINE / LONG MESSAGES
@@ -84,7 +83,7 @@ async function aboutHandler(z) {
     const localProfilePath = `${z.config.storageDirectoryLocal}/admin.jpg`;
     adminProfile = MessageMedia.fromFilePath(localProfilePath);
     const userName = (await z.message.getContact()).pushname;
-    const botPrefix = config.botPrefix === null ? '' : z.config.botPrefix;
+    const botPrefix = z.config.botPrefix === null ? '' : z.config.botPrefix;
     await z.client.sendMessage(z.message.from, adminProfile, 
         {
             caption: aboutMsg(userName, botPrefix) ?? 'Belum ditambahkan'
@@ -93,14 +92,14 @@ async function aboutHandler(z) {
 }
 
 async function epochHandler(z) {
-    const nowDateTime = date.format(new Date(), 'DD-MM-YYYY HH:mm:ss');
+    const nowDateTime = formatDateTimeNow(z.config.timezone, 'dd-MM-yyyy HH:mm:ss');
     const nowEpoch = Date.now();
     if (z.arguments.length > 0) {
         const [day, month, year] = z.arguments[0] ? z.arguments[0].split('-').map(Number) : null;
         const [hours, minutes, seconds] = z.arguments[1] ? z.arguments[1].split(':').map(Number) : '00:00:00'.split(':').map(Number);
         const dateObject = new Date(year, month - 1, day, hours, minutes, seconds);
         if (dateObject.getTime().toString().includes('-')) {
-            await z.client.sendMessage(z.message.from, "Tanggal tidak valid (format: DD-MM-YYYY HH:MM:SS)");
+            await z.client.sendMessage(z.message.from, "Tanggal tidak valid (format: DD-MM-YYYY HH:MM:SS) cth: 11-11-2002 08:45:00");
         } else {
             await z.client.sendMessage(z.message.from, `${dateObject.getTime()}`);
         }
@@ -118,7 +117,7 @@ async function greetHandler(z) {
 }
 
 async function helpHandler(z) {
-    const botPrefix = config.botPrefix === null ? '' : config.botPrefix;
+    const botPrefix = z.config.botPrefix === null ? '' : z.config.botPrefix;
     await z.client.sendMessage(z.message.from, helpMsg(botPrefix) ?? 'Belum ditambahkan');
 }
 
@@ -134,16 +133,16 @@ async function stickerHandler(z) {
         let stickerName = "";
         if (z.arguments.length > 0) {
             if (z.arguments.length === 2) {
-                stickerAuthor = `${(z.arguments[1].includes("_") ? z.arguments[1].split("_").join(" ") : z.arguments[1])} • ${config.author}`;
+                stickerAuthor = `${(z.arguments[1].includes("_") ? z.arguments[1].split("_").join(" ") : z.arguments[1])} • ${z.config.author}`;
                 stickerName = z.arguments[0].includes("_") ? z.arguments[0].split("_").join(" ") : z.arguments[0];
             } else {
-                stickerAuthor = `${config.author}`;
+                stickerAuthor = `${z.config.author}`;
                 stickerName = z.arguments[0].includes("_") ? z.arguments[0].split("_").join(" ") : z.arguments[0];
             }                            
         }
         else {
-            stickerAuthor = `${config.author}`;
-            stickerName = `${config.name}`;
+            stickerAuthor = `${z.config.author}`;
+            stickerName = `${z.config.name}`;
         }
         await z.client.sendMessage(z.message.from, media, {
             sendMediaAsSticker: true,
