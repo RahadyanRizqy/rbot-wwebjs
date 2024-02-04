@@ -91,9 +91,9 @@ class BotMessageHandler {
                                 if (this.isFromOwner || this.classType === 2) {
                                     if (_dbcmd[this.command].hasOwnProperty('handler')) { await this.enumMessageHandler[_dbcmd[this.command].handler](this); }
                                 }
-                                else { await this.client.sendMessage(this.message.from, _dbcmd.else.answer); }
+                                else { await this.enumMessageHandler[_dbcmd.else.handler](this); }
                             }
-                            else { await this.client.sendMessage(this.message.from, _dbcmd.else.answer); }
+                            else { await this.enumMessageHandler[_dbcmd.else.handler](this); }
                             break;
                         case 'Maintenance': // IF MAINTENANCE
                             if (!this.isFromOwner) { await this.client.sendMessage(this.message.from, _dbabout[1].answer); }
@@ -101,7 +101,7 @@ class BotMessageHandler {
                                 if (this.isCommand && this.validInput) {
                                     if (_dbcmd[this.command].hasOwnProperty('handler')) { await this.enumMessageHandler[_dbcmd[this.command].handler](this); }
                                 }
-                                else { await this.client.sendMessage(this.message.from, _dbcmd.else.answer); }
+                                else { await this.enumMessageHandler[_dbcmd.else.handler](this); }
                             }
                             break;
                         case 'Offline': // IF (GOING) OFFLINE

@@ -1,11 +1,9 @@
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
-const fs = require('fs');
-const path = require('path');
-const moment = require('moment-timezone');
-const puppeteer = require('puppeteer');
 
-const { aboutCaption, helpMsg, featureMsg } = require('./statics/caption');
+
+const moment = require('moment-timezone');
+
 const { bmhdb } = require('./utils/BMHDatabase');
 const { BotMessageHandler } = require('./utils/BotMessageHandler');
 const { EnumMessageHandler } = require('./utils/EnumMessageHandler');

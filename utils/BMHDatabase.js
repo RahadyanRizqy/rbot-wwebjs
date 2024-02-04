@@ -56,6 +56,11 @@ const bmhdb = {
       classType: 2,
       scopeType: 1
     },
+    epoch: {
+      handler: "epochHandler",
+      classType: 2,
+      scopeType: 1
+    },
     // igdl: {
     //   handler: "igdlHandler",
     //   classType: 2,

@@ -1,6 +1,7 @@
-const { checkFileFromUrl } = require('./Functions');
+const { fileExists, checkFileFromUrl } = require('./Functions');
 const { MessageMedia } = require('whatsapp-web.js');
 const config  = require('./../config.json');
+const date = require('date-and-time');
 
 // MULTILINE / LONG MESSAGES
 const helpMsg = (botPrefix) => `★═══[☝️CMDS]═══★
@@ -60,7 +61,8 @@ const featureMsg = `★═══[🧐FEATURES]═══★
 (*)TBA`;
 
 async function elseHandler(z) {
-    await z.client.sendMessage(z.message.from, `Tidak jelas, mangsud? 🤨 *${z.prefix}help*`);
+    const botPrefix = z.config.botPrefix === null ? '' : z.config.botPrefix;
+    await z.client.sendMessage(z.message.from, `Tidak jelas, mangsud? 🤨 *${botPrefix}help*`);
 }
 
 async function onHandler(z) {
@@ -79,10 +81,10 @@ async function haltHandler(z) {
 }
 
 async function aboutHandler(z) {
-    const localProfilePath = `${config.storageDirectoryLocal}/admin.jpg`;
+    const localProfilePath = `${z.config.storageDirectoryLocal}/admin.jpg`;
     adminProfile = MessageMedia.fromFilePath(localProfilePath);
     const userName = (await z.message.getContact()).pushname;
-    const botPrefix = config.botPrefix === null ? '' : config.botPrefix;
+    const botPrefix = config.botPrefix === null ? '' : z.config.botPrefix;
     await z.client.sendMessage(z.message.from, adminProfile, 
         {
             caption: aboutMsg(userName, botPrefix) ?? 'Belum ditambahkan'
@@ -90,8 +92,29 @@ async function aboutHandler(z) {
     );
 }
 
+async function epochHandler(z) {
+    const nowDateTime = date.format(new Date(), 'DD-MM-YYYY HH:mm:ss');
+    const nowEpoch = Date.now();
+    if (z.arguments.length > 0) {
+        const [day, month, year] = z.arguments[0] ? z.arguments[0].split('-').map(Number) : null;
+        const [hours, minutes, seconds] = z.arguments[1] ? z.arguments[1].split(':').map(Number) : '00:00:00'.split(':').map(Number);
+        const dateObject = new Date(year, month - 1, day, hours, minutes, seconds);
+        if (dateObject.getTime().toString().includes('-')) {
+            await z.client.sendMessage(z.message.from, "Tanggal tidak valid (format: DD-MM-YYYY HH:MM:SS)");
+        } else {
+            await z.client.sendMessage(z.message.from, `${dateObject.getTime()}`);
+        }
+    }
+    else {
+        const epochMsg = (a, b) => `Tanggal saat ini *${a}*\n\nEpoch saat ini *${b}*`;
+        await z.client.sendMessage(z.message.from, epochMsg(nowDateTime, nowEpoch));
+    }
+    // const currentTime = Date.now();
+    // await z.client.sendMessage(z.message.from, `${currentTime}`);
+}
+
 async function greetHandler(z) {
-    await client.sendMessage(msg.from, `Halo 👋 ${(await z.message.getContact()).pushname}`);
+    await z.client.sendMessage(z.message.from, `Halo 👋 ${(await z.message.getContact()).pushname}`);
 }
 
 async function helpHandler(z) {
@@ -137,7 +160,6 @@ async function stickerHandler(z) {
 
 const EnumMessageHandler = {
     elseHandler,
-    onHandler,
     // elseHandler: elseHandler,
     
     onHandler,
@@ -145,9 +167,10 @@ const EnumMessageHandler = {
     haltHandler,
 
     aboutHandler,
+    epochHandler,
+    featureHandler,
     greetHandler,
     helpHandler,
-    featureHandler,
     stickerHandler,
 }
 
