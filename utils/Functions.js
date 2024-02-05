@@ -47,4 +47,4 @@ function checkFileFromUrl(url) {
     });
 }
 
-module.exports = { logErrorToFile, fileExists, checkFileFromUrl, formatDateTimeNow };
+module.exports = { formatDateTimeNow, logErrorToFile, fileExists, checkFileFromUrl };

@@ -89,6 +89,6 @@ const bmhdb = {
     private: 1,
     group: 2
   }
-}
+};
 
 module.exports = { bmhdb };

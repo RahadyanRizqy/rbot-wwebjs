@@ -1,12 +1,12 @@
-const { Client, LocalAuth } = require('whatsapp-web.js');
+const { Client, LocalAuth }= require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 
-const { bmhdb } = require('./utils/BMHDatabase');
-const { BotMessageHandler } = require('./utils/BotMessageHandler');
-const { EnumMessageHandler } = require('./utils/EnumMessageHandler');
-const { logErrorToFile } = require('./utils/Functions');
+const { bmhdb } = require('./utils/BMHDatabase.js');
+const { BotMessageHandler } = require('./utils/BotMessageHandler.js');
+const { EnumMessageHandler } = require('./utils/EnumMessageHandler.js');
+const { logErrorToFile } = require('./utils/Functions.js');
 
-const config  = require('./config.json');
+const config = require('./config.json');
 
 const client = new Client({
     puppeteer: {

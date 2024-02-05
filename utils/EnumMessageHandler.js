@@ -1,6 +1,5 @@
-const { fileExists, checkFileFromUrl, formatDateTimeNow } = require('./Functions');
+const { fileExists, checkFileFromUrl, formatDateTimeNow } = require('./Functions.js');
 const { MessageMedia } = require('whatsapp-web.js');
-const date = require('date-and-time');
 
 // MULTILINE / LONG MESSAGES
 const helpMsg = (botPrefix) => `★═══[☝️CMDS]═══★
