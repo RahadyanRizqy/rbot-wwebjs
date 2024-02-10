@@ -23,7 +23,7 @@ ${botPrefix}feature
 -> daftar fitur bot ini`;
 
 const aboutMsg = (userName, botPrefix) => `★═══[🤖R-BOT]═══★
-Hai 👋 ${userName}, versi *v1.31-stable* paling sederhana ini masih difokuskan untuk keperluan sticker dan gif. Bila ada saran, permasalahan, error, respon tidak sesuai silahkan bisa lapor ke admin 👨‍💻. (Admin bilek: 😎)
+Hai 👋 ${userName}, *v1.31-stable* paling sederhana ini masih difokuskan untuk keperluan sticker dan gif. Bila ada saran, permasalahan, error, respon tidak sesuai silahkan bisa lapor ke admin 👨‍💻. (Admin bilek: 😎)
 
 ★═══[❓HELP]═══★
 ${botPrefix}help
@@ -35,20 +35,19 @@ GitHub: https://github.com/RahadyanRizqy
 
 ★═══[🗒️NOTE]═══★
 ◆ Untuk konversi video menjadi sticker/gif mungkin agak lama dikit
-◆ Untuk konversi gambar transparan (.PNG) menggunakan document
-◆ Cek maintenance/tidak di status profil bot wa
-◆ Maintenance dilakukan tiap akhir pekan Sabtu 09.00 (WIB) +7
-◆ Atau kalau ada error dan perubahan yang urgent
-
-★═══[🙏MUCH THX]═══★
-☞ https://wwebjs.dev/
-☞ https://github.com/DrelezTM
-☞ https://github.com/zarlicho
+◆ Cek status BOT di profil WA
+◆ Maintenance tiap akhir bulan jam (09.00 WIB)
+◆ Atau kalau error dan perubahan yang urgent
 
 ★═══[Proxmox VE ⓧ]═══★
 SELF-HOSTED CHATBOT
 container-id: 108 
-hostname: ubct-rbot-wwebjs`;
+hostname: ubct-rbot-wwebjs
+
+★═══[🙏MUCH THX]═══★
+☞ https://wwebjs.dev/
+☞ https://github.com/DrelezTM
+☞ https://github.com/zarlicho`;
 
 const featureMsg = `★═══[🧐FEATURES]═══★
 ① ubah gambar/video jadi sticker
