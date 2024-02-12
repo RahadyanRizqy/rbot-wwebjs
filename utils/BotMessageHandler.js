@@ -1,3 +1,5 @@
+const { logErrorToFile } = require('./Functions');
+
 class BotMessageHandler {
     constructor(client, message, enumMessageHandler, database, config) {
 
@@ -114,7 +116,9 @@ class BotMessageHandler {
                 }
             }
         }
-        catch (error) { throw new Error(error.toString()); }
+        catch (error) { 
+            logErrorToFile(error.toString(), this.config);
+        }
     }
 
     async listenGroup(roleMention="@") {

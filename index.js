@@ -1,5 +1,6 @@
 const { Client, LocalAuth }= require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
+const { exec } = require('child_process');
 
 const { bmhdb } = require('./utils/BMHDatabase.js');
 const { BotMessageHandler } = require('./utils/BotMessageHandler.js');
@@ -33,7 +34,15 @@ client.on('message', async (message) => {
         _bmh.listenPrivate();
         console.log(_bmh._bmhData);
     } catch (error) {
-        logErrorToFile(error.toString(), config);
+        // logErrorToFile(error.toString(), config);
+        // console.error(error.message);
+        if (error.message.includes('ERR_NETWORK_CHANGED')) {
+            exec('./restart.sh');
+        }
+        else {
+            logErrorToFile(error.toString(), config);
+            exec('./restart.sh');
+        }
     }
 });
 

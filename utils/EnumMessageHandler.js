@@ -111,7 +111,7 @@ async function epochHandler(z) {
 }
 
 async function greetHandler(z) {
-    await z.client.sendMessage(z.message.from, `Halo 👋 ${(await z.message.getContact()).pushname}`);
+    await z.client.sendMessage(z.message.from, `Halo 👋 ${(await message.getContact()).pushname}`);
 }
 
 async function helpHandler(z) {
