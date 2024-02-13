@@ -1,3 +1,4 @@
+const { el } = require('date-fns/locale');
 const { fileExists, checkFileFromUrl, formatDateTimeNow } = require('./Functions.js');
 const { MessageMedia } = require('whatsapp-web.js');
 
@@ -155,18 +156,26 @@ async function stickerHandler(z) {
 }
 
 async function getStickersHandler(z) {
-    function getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
+    let stickerLimit = 10;
+    if (z.arguments.length > 0) {
+        stickerLimit = parseInt(z.arguments[0]);
+        if (stickerLimit > 30) {
+            await z.client.sendMessage(z.message.from, "Kebanyakan cuy 😩");
+            return
+        }
     }
+    
+    function getRandomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
     const randomNumbersSet = new Set();
-    while (randomNumbersSet.size < 10) {
+    while (randomNumbersSet.size < stickerLimit) {
         const randomNumber = getRandomInt(1, 120);
         randomNumbersSet.add(randomNumber);
     }
     const randomNumbersArray = Array.from(randomNumbersSet);
     await z.client.sendMessage(z.message.from, 'Tunggu ya...');
-    let stickerLimit = parseInt(z.arguments[0]) ?? 10;
-    for (let i = 0; i < randomNumbersArray.length; i++) {
+    let i = 0;
+    for (i; i < randomNumbersArray.length; i++) {
         const stickerPerArray = `${z.config.storageDomainPublic}/stickers/${randomNumbersArray[i]}.png`;
         const media = await MessageMedia.fromUrl(stickerPerArray, {
             unsafeMime: false
@@ -177,9 +186,8 @@ async function getStickersHandler(z) {
             stickerAuthor: `${z.config.botPhone}`
         });
     }
-    if (i = 10) {
-        await z.client.sendMessage(z.message.from, "Udah 10 coy!");
-    }
+    if (i = stickerLimit) { await z.client.sendMessage(z.message.from, `Udah ${i} coy!`); }
+    else { await z.client.sendMessage(z.message.from, "Kayaknya ada yang kurang deh 😅"); }
 }
 
 async function getGifsHandler(z) {
