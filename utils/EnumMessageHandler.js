@@ -166,15 +166,15 @@ async function getStickersHandler(z) {
     for (let i = 0; i < randomNumbersArray.length; i++) {
         const stickerPerArray = `${z.config.storageDomainPublic}/stickers/${randomNumbersArray[i]}.png`;
         const media = await MessageMedia.fromUrl(stickerPerArray, {
-            unsafeMime: true
+            unsafeMime: false
         });
         await z.client.sendMessage(z.message.from, media, {
             sendMediaAsSticker: true,
             stickerName: `${z.config.name}`,
             stickerAuthor: `${z.config.botPhone}`
         });
-        // await z.client.sendMessage(z.message.from, `${stickerPerArray}`);
     }
+    await z.client.sendMessage(z.message.from, "Udah 10 coy!");
 }
 
 async function getGifsHandler(z) {
