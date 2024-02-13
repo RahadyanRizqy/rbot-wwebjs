@@ -165,7 +165,9 @@ async function getStickersHandler(z) {
     await z.client.sendMessage(z.message.from, 'Tunggu ya...');
     for (let i = 0; i < randomNumbersArray.length; i++) {
         const stickerPerArray = `${z.config.storageDomainPublic}/stickers/${randomNumbersArray[i]}.png`;
-        const media = await MessageMedia.fromUrl(stickerPerArray);
+        const media = await MessageMedia.fromUrl(stickerPerArray, {
+            unsafeMime: true
+        });
         await z.client.sendMessage(z.message.from, media, {
             sendMediaAsSticker: true,
             stickerName: `${z.config.name}`,
