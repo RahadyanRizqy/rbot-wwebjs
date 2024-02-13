@@ -29,7 +29,7 @@ ${botPrefix}feature
 -> daftar fitur bot ini`;
 
 const aboutMsg = (userName, botPrefix) => `★═══[🤖R-BOT]═══★
-Hai 👋 ${userName}, *v1.31-stable* paling sederhana ini masih difokuskan untuk keperluan sticker dan gif. Bila ada saran, permasalahan, error, respon tidak sesuai silahkan bisa lapor ke admin 👨‍💻.
+Hai 👋 ${userName}, *v1.32-stable* paling sederhana ini masih difokuskan untuk keperluan sticker dan gif. Bila ada saran, permasalahan, error, respon tidak sesuai silahkan bisa lapor ke admin 👨‍💻.
 
 ★═══[❓HELP]═══★
 ${botPrefix}help
