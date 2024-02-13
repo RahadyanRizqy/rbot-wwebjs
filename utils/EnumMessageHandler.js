@@ -111,7 +111,7 @@ async function epochHandler(z) {
 }
 
 async function greetHandler(z) {
-    await z.client.sendMessage(z.message.from, `Halo 👋 ${(await message.getContact()).pushname}`);
+    await z.client.sendMessage(z.message.from, `Halo 👋 ${(await z.message.getContact()).pushname}`);
 }
 
 async function helpHandler(z) {
@@ -155,9 +155,17 @@ async function stickerHandler(z) {
     // await z.client.sendMessage(z.message.from, 'Belum ditambahkan');
 }
 
+async function getStickersHandler(z) {
+    // console.log("Collection Handler called!");
+    await z.client.sendMessage(z.message.from, 'Tunggu ya...');
+}
+
+async function getGifsHandler(z) {
+    await z.client.sendMessage(z.message.from, 'Masih dalam pengerjaan 😅🙏');
+}
+
 const EnumMessageHandler = {
     elseHandler,
-    // elseHandler: elseHandler,
     
     onHandler,
     offHandler,
@@ -169,6 +177,8 @@ const EnumMessageHandler = {
     greetHandler,
     helpHandler,
     stickerHandler,
+    getStickersHandler,
+    getGifsHandler
 }
 
 module.exports = { EnumMessageHandler };

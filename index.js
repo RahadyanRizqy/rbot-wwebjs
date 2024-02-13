@@ -32,7 +32,7 @@ client.on('message', async (message) => {
     try {
         const _bmh = new BotMessageHandler(client, message, EnumMessageHandler, bmhdb, config);
         _bmh.listenPrivate();
-        console.log(_bmh._bmhData);
+        // console.log(_bmh._bmhData);
     } catch (error) {
         // logErrorToFile(error.toString(), config);
         // console.error(error.message);

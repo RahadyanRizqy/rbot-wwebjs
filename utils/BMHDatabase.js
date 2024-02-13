@@ -61,13 +61,18 @@ const bmhdb = {
       classType: 2,
       scopeType: 1
     },
-    // igdl: {
-    //   handler: "igdlHandler",
-    //   classType: 2,
-    //   scopeType: 1
-    // },
     sticker: {
       handler: "stickerHandler",
+      classType: 2,
+      scopeType: 1
+    },
+    stickers: {
+      handler: "getStickersHandler",
+      classType: 2,
+      scopeType: 1
+    },
+    gifs: {
+      handler: "getGifsHandler",
       classType: 2,
       scopeType: 1
     }
