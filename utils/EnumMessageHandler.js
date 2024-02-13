@@ -16,7 +16,9 @@ ${botPrefix}sticker name author
 -> ${botPrefix}sticker saja maka default r-bot@rdn_rzq • 088989126165
 
 ${botPrefix}stickers
--> kirim 10 sticker random
+-> kirim sticker random max 30
+-> cth: stickers 10 / stickers 20 / stickers 30
+-> default 10 sticker
 
 ${botPrefix}gifs
 -> dalam proses
@@ -163,6 +165,7 @@ async function getStickersHandler(z) {
     }
     const randomNumbersArray = Array.from(randomNumbersSet);
     await z.client.sendMessage(z.message.from, 'Tunggu ya...');
+    let stickerLimit = parseInt(z.arguments[0]) ?? 10;
     for (let i = 0; i < randomNumbersArray.length; i++) {
         const stickerPerArray = `${z.config.storageDomainPublic}/stickers/${randomNumbersArray[i]}.png`;
         const media = await MessageMedia.fromUrl(stickerPerArray, {
@@ -174,7 +177,9 @@ async function getStickersHandler(z) {
             stickerAuthor: `${z.config.botPhone}`
         });
     }
-    await z.client.sendMessage(z.message.from, "Udah 10 coy!");
+    if (i = 10) {
+        await z.client.sendMessage(z.message.from, "Udah 10 coy!");
+    }
 }
 
 async function getGifsHandler(z) {
