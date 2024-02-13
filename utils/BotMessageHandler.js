@@ -118,6 +118,7 @@ class BotMessageHandler {
         }
         catch (error) { 
             logErrorToFile(error.toString(), this.config);
+            await this.client.sendMessage(this.message.from, "Bisa dicoba lagi?");
         }
     }
 

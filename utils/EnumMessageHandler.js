@@ -153,7 +153,26 @@ async function stickerHandler(z) {
 }
 
 async function getStickersHandler(z) {
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    const randomNumbersSet = new Set();
+    while (randomNumbersSet.size < 10) {
+        const randomNumber = getRandomInt(1, 120);
+        randomNumbersSet.add(randomNumber);
+    }
+    const randomNumbersArray = Array.from(randomNumbersSet);
     await z.client.sendMessage(z.message.from, 'Tunggu ya...');
+    for (let i = 0; i < randomNumbersArray.length; i++) {
+        const stickerPerArray = `${z.config.storageDomainPublic}/stickers/${randomNumbersArray[i]}.png`;
+        const media = await MessageMedia.fromUrl(stickerPerArray);
+        await z.client.sendMessage(z.message.from, media, {
+            sendMediaAsSticker: true,
+            stickerName: `${z.config.name}`,
+            stickerAuthor: `${z.config.botPhone}`
+        });
+        // await z.client.sendMessage(z.message.from, `${stickerPerArray}`);
+    }
 }
 
 async function getGifsHandler(z) {
