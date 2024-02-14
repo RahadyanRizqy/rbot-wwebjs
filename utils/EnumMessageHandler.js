@@ -14,7 +14,7 @@ ${botPrefix}sticker name author
 -> ubah media jadi sticker 
 -> cth cmd: ${botPrefix}sticker / ${botPrefix}sticker sticker saya / ${botPrefix}sticker lucu_banget lho_rek
 -> untuk spasi masih pakai underscore _
--> ${botPrefix}sticker saja maka default r-bot@rdn_rzq • 088989126165
+-> ${botPrefix}sticker saja maka diisi default
 
 ${botPrefix}stickers
 -> kirim sticker random max 30
@@ -132,10 +132,10 @@ async function stickerHandler(z) {
         let stickerName = "";
         if (z.arguments.length > 0) {
             if (z.arguments.length === 2) {
-                stickerAuthor = `${(z.arguments[1].includes("_") ? z.arguments[1].split("_").join(" ") : z.arguments[1])} • ${z.config.botPhone}`;
+                stickerAuthor = `${(z.arguments[1].includes("_") ? z.arguments[1].split("_").join(" ") : z.arguments[1])} • ${z.config.name}//${z.config.botPhone}`;
                 stickerName = z.arguments[0].includes("_") ? z.arguments[0].split("_").join(" ") : z.arguments[0];
             } else {
-                stickerAuthor = `${z.config.botPhone}`;
+                stickerAuthor = `${z.config.name}//${z.config.botPhone}`;
                 stickerName = z.arguments[0].includes("_") ? z.arguments[0].split("_").join(" ") : z.arguments[0];
             }                            
         }
