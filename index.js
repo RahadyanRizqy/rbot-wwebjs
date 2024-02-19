@@ -1,4 +1,4 @@
-const { Client, LocalAuth }= require('whatsapp-web.js');
+const { Client, LocalAuth, MessageMedia }= require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const { exec } = require('child_process');
 const { nanoid } = require('nanoid');
@@ -43,6 +43,7 @@ client.on('message', async (message) => {
         const _bmh = new BotMessageHandler(client, message, EnumMessageHandler, bmhdb, config);
         _bmh.listenPrivate();
         console.log(_bmh._bmhData);
+
         // if (message.body === 'start') {
         //     const uniqueId = nanoid();
         //     currentSessionId = `convoId-${uniqueId}`;

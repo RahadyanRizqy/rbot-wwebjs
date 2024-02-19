@@ -31,14 +31,14 @@ ${botPrefix}epoch now (format: DD-MM-YYYY.HH:MM:SS)
 ${botPrefix}feature
 -> daftar fitur bot ini`;
 
-const aboutMsg = (userName, botPrefix) => `★═══[🤖R-BOT]═══★
+const aboutMsg = (userName, botPrefix, owner) => `★═══[🤖R-BOT]═══★
 Hai 👋 ${userName}, *v1.32-stable* paling sederhana ini masih difokuskan untuk keperluan sticker dan gif. Bila ada saran, permasalahan, error, respon tidak sesuai silahkan bisa lapor ke admin 👨‍💻.
 
 ★═══[❓HELP]═══★
 ${botPrefix}help
 
 ★═══[🦉ADMIN]═══★
-WhatsApp: 6288804897436
+WA: @${owner}
 IG: instagram.com/rdn_rzq
 
 ★═══[🗒️NOTE]═══★
@@ -86,7 +86,8 @@ async function aboutHandler(z) {
     const botPrefix = z.config.botPrefix === null ? '' : z.config.botPrefix;
     await z.client.sendMessage(z.message.from, adminProfile, 
         {
-            caption: aboutMsg(userName, botPrefix) ?? 'Belum ditambahkan'
+            caption: aboutMsg(userName, botPrefix, z.config.ownerPhone) ?? 'Belum ditambahkan',
+            mentions: [z.config.ownerPhone + '@c.us']
         }
     );
 }
