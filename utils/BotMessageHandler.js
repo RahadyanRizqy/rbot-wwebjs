@@ -1,5 +1,11 @@
 const { logErrorToFile } = require('./Functions');
 
+class SessionHandler {
+    constructor(something) {
+        // Dah bingung mo ngoding apa...
+    }
+}
+
 class BotMessageHandler {
     constructor(client, message, enumMessageHandler, database, config) {
 
@@ -28,6 +34,8 @@ class BotMessageHandler {
         // -- MESSAGE BODY SCOPE VARIABLE --- //
         this.isMentioned = false;
         this.isCommand = false;
+        this.isSession = false;
+        this.sessionId = "";
         this.prefix = config.botPrefix;
         this.argparser = config.botArgparser;
         this.command = "";
@@ -54,6 +62,7 @@ class BotMessageHandler {
 
         // --- MESSAGE BODY SCOPE CONDITION --- //
         if (this.message.mentionedIds.includes(this.client.info.wid._serialized)) { this.isMentioned = true; }
+        if (Object.keys(this.database.session).includes(command)) { this.isSession = true; }
         if (this.prefix !== null && !(command.startsWith(this.prefix))) { this.validInput = false; }
         if (command.startsWith(this.prefix)) { command = command.split(this.prefix)[1]; }
         if (Object.keys(this.database.command).includes(command)) { this.isCommand = true; }
@@ -69,6 +78,7 @@ class BotMessageHandler {
             isBlank: this.isBlank,
             isGroupChat: this.isGroupChat,
             isMentioned: this.isMentioned,
+            isSession: this.isSession,
             isCommand: this.isCommand,
             isPrivateChat: this.isPrivateChat,
             isFromOwner: this.isFromOwner,
@@ -95,6 +105,9 @@ class BotMessageHandler {
                                 }
                                 else { await this.enumMessageHandler[_dbcmd.else.handler](this); }
                             }
+                            // else if (this.isSession && this.validInput) {
+                                
+                            // }
                             else { await this.enumMessageHandler[_dbcmd.else.handler](this); }
                             break;
                         case 'Maintenance': // IF MAINTENANCE

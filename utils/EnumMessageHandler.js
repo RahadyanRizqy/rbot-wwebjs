@@ -38,8 +38,8 @@ Hai 👋 ${userName}, *v1.32-stable* paling sederhana ini masih difokuskan untuk
 ${botPrefix}help
 
 ★═══[🦉ADMIN]═══★
-WhatsApp: https://wa.me/6288804897436
-IG: https://instagram.com/rdn_rzq
+WhatsApp: 6288804897436
+IG: instagram.com/rdn_rzq
 
 ★═══[🗒️NOTE]═══★
 ◆ Untuk konversi video menjadi sticker/gif mungkin agak lama dikit
@@ -49,8 +49,7 @@ IG: https://instagram.com/rdn_rzq
 
 ★═══[🙏MUCH THX]═══★
 ☞ https://wwebjs.dev/
-☞ https://github.com/DrelezTM
-☞ https://github.com/zarlicho`;
+☞ https://github.com/DrelezTM`;
 
 const featureMsg = `★═══[🧐FEATURES]═══★
 ① ubah gambar/video jadi sticker

@@ -78,6 +78,19 @@ const bmhdb = {
     }
   },
 
+  session: {
+    makebio: {
+      handler: "makeBioHandler",
+      classType: 2,
+      scopeType: 1
+    },
+    count: {
+      handler: "countHandler",
+      classType: 2,
+      scopeType: 1
+    }
+  },
+
   trivials: {
     hi: {
       answer: "Halo",
