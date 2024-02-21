@@ -195,7 +195,7 @@ async function getGifsHandler(z) {
 
 async function qotdHandler(z) {
     const response = await fetch('https://favqs.com/api/qotd');
-    const data = await response.json();a
+    const data = await response.json();
     const qotdString = `${data.quote.body}\n\n-----${data.quote.author}`;
     await z.client.sendMessage(z.message.from, qotdString);
 
