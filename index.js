@@ -4,6 +4,7 @@ const { exec } = require('child_process');
 const { nanoid } = require('nanoid');
 const fs = require('fs');
 const filePath = './statics/db.json';
+const os = require('os');
 
 // convo db
 
