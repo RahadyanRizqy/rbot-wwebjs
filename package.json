@@ -6,6 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "nodemonConfig": {
+    "ignore": ["statics/db.json"]
+  },
   "author": "rdn_rzq",
   "license": "ISC",
   "dependencies": {
@@ -13,6 +16,7 @@
     "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.0",
     "ffmpeg": "^0.0.4",
+    "lowdb": "^1.0.0",
     "moment-timezone": "^0.5.44",
     "nanoid": "^3.0.1",
     "puppeteer": "^21.10.0",

@@ -75,17 +75,22 @@ const bmhdb = {
       handler: "getGifsHandler",
       classType: 2,
       scopeType: 1
+    },
+    qotd: {
+      handler: "qotdHandler",
+      classType: 2,
+      scopeType: 1
     }
   },
 
-  session: {
+  convo: {
     makebio: {
-      handler: "makeBioHandler",
+      convo: "bioHandler",
       classType: 2,
       scopeType: 1
     },
     count: {
-      handler: "countHandler",
+      convo: "countHandler",
       classType: 2,
       scopeType: 1
     }

@@ -34,7 +34,7 @@ class BotMessageHandler {
         // -- MESSAGE BODY SCOPE VARIABLE --- //
         this.isMentioned = false;
         this.isCommand = false;
-        this.isSession = false;
+        this.isConvo = false;
         this.sessionId = "";
         this.prefix = config.botPrefix;
         this.argparser = config.botArgparser;
@@ -62,7 +62,7 @@ class BotMessageHandler {
 
         // --- MESSAGE BODY SCOPE CONDITION --- //
         if (this.message.mentionedIds.includes(this.client.info.wid._serialized)) { this.isMentioned = true; }
-        if (Object.keys(this.database.session).includes(command)) { this.isSession = true; }
+        if (Object.keys(this.database.convo).includes(command)) { this.isConvo = true; }
         if (this.prefix !== null && !(command.startsWith(this.prefix))) { this.validInput = false; }
         if (command.startsWith(this.prefix)) { command = command.split(this.prefix)[1]; }
         if (Object.keys(this.database.command).includes(command)) { this.isCommand = true; }
@@ -78,7 +78,7 @@ class BotMessageHandler {
             isBlank: this.isBlank,
             isGroupChat: this.isGroupChat,
             isMentioned: this.isMentioned,
-            isSession: this.isSession,
+            isConvo: this.isConvo,
             isCommand: this.isCommand,
             isPrivateChat: this.isPrivateChat,
             isFromOwner: this.isFromOwner,

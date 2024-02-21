@@ -164,7 +164,6 @@ async function getStickersHandler(z) {
             return
         }
     }
-    
     function getRandomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 
     const randomNumbersSet = new Set();
@@ -176,7 +175,7 @@ async function getStickersHandler(z) {
     await z.client.sendMessage(z.message.from, 'Tunggu ya...');
     let i = 0;
     for (i; i < randomNumbersArray.length; i++) {
-        const stickerPerArray = `${z.config.storageDomainPublic}/stickers/${randomNumbersArray[i]}.png`;
+        const stickerPerArray = `${z.config.storageDomainServer}/stickers/${randomNumbersArray[i]}.png`;
         const media = await MessageMedia.fromUrl(stickerPerArray, {
             unsafeMime: false
         });
@@ -194,6 +193,14 @@ async function getGifsHandler(z) {
     await z.client.sendMessage(z.message.from, 'Masih dalam pengerjaan 😅🙏');
 }
 
+async function qotdHandler(z) {
+    const response = await fetch('https://favqs.com/api/qotd');
+    const data = await response.json();a
+    const qotdString = `${data.quote.body}\n\n-----${data.quote.author}`;
+    await z.client.sendMessage(z.message.from, qotdString);
+
+}
+
 const EnumMessageHandler = {
     elseHandler,
 
@@ -208,7 +215,8 @@ const EnumMessageHandler = {
     helpHandler,
     stickerHandler,
     getStickersHandler,
-    getGifsHandler
+    getGifsHandler,
+    qotdHandler
 }
 
 module.exports = { EnumMessageHandler };

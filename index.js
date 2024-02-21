@@ -2,6 +2,17 @@ const { Client, LocalAuth, MessageMedia }= require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const { exec } = require('child_process');
 const { nanoid } = require('nanoid');
+const fs = require('fs');
+const filePath = './statics/db.json';
+
+// convo db
+
+// const low = require('lowdb');
+// const FileSync = require('lowdb/adapters/FileSync');
+// const adapter = new FileSync('./statics/db.json');
+// const db = low(adapter);
+
+// db.defaults({ convoDb: { convos: [] } }).write();
 
 const { bmhdb } = require('./utils/BMHDatabase.js');
 const { BotMessageHandler } = require('./utils/BotMessageHandler.js');
@@ -30,48 +41,47 @@ client.on('ready', () => {
     // console.log(client);
 });
 
+// let convoDb = {};
 class ConvoHandler {
     constructor(client, message) {
+        this.client = client;
+        this.message = message;
+        this.userId = message.from;
+    }
 
+    async listenConvo() {
+        if (this.message.body === 'start') {
+            if (sendCount !== messsagesToSend.length) {
+                await this.client.sendMessage(this.message.from, 'Mari kita mulai...');
+                convoDb[this.userId] = {
+                    command: 'start',
+                    sent: [messsagesToSend[sendCount]]
+                }
+                await this.client.sendMessage(this.message.from, `${messsagesToSend[sendCount]}`);
+                sendCount += 1;
+            }
+        }
+        else {
+            if (Object.keys(convoDb).includes(this.message.from)) {
+                if (convoDb[this.message.from].command === 'start' & sendCount !== messsagesToSend.length) {
+                    convoDb[this.userId].received.push(this.message.body);
+                    convoDb[this.userId].sent.push(messsagesToSend[sendCount]);
+                    sendCount += 1;
+                }
+            }
+        }
+        console.log(convoDb); 
     }
 }
 
-const convo = {};
-let currentSessionId = '';
+let messsagesToSend = ['Nama kamu siapa?', 'Rumah kamu dimana?', 'Sebutkan fakta menarik tentangmu!'];
+let messagesToReceive = [];
+
 client.on('message', async (message) => {
     try {
         const _bmh = new BotMessageHandler(client, message, EnumMessageHandler, bmhdb, config);
         _bmh.listenPrivate();
-        console.log(_bmh._bmhData);
-
-        // if (message.body === 'start') {
-        //     const uniqueId = nanoid();
-        //     currentSessionId = `convoId-${uniqueId}`;
-        //     convo[currentSessionId] = {
-        //         command: 'start',
-        //         sent: ['Mari kita mulai...', 'Nama kamu siapa?'],
-        //         received: []
-        //     }
-        //     client.sendMessage(message.from, 'Mari kita mulai...');
-        //     client.sendMessage(message.from, 'Nama kamu siapa?');
-        // }
-        // else {
-        //     if (Object.keys(convo).includes(currentSessionId)) {
-        //         if (convo[currentSessionId].command === 'start') {
-        //             let questionCount = 1;
-        //             if (questionCount > 0) {
-        //                 convo[currentSessionId].received.push(message.body);
-        //                 client.sendMessage(message.from, 'Sebutkan fakta menarik tentangmu!');
-        //                 convo[currentSessionId].sent.push('Sebutkan fakta menarik tentangmu!');
-        //                 // convo[currentSessionId].received.push(message.body);
-        //                 questionCount -= 1;
-        //             }
-        //             console.log(questionCount);
-        //             client.sendMessage(message.from, `Nama kamu ${convo[currentSessionId].received[0]}\n Fakta menarik: ${convo[currentSessionId].received[1]}`);
-        //         }
-        //     }
-        // }
-        // console.log(convo);
+        // console.log(_bmh._bmhData);
     } catch (error) {
         // logErrorToFile(error.toString(), config);
         // console.error(error.message);
